@@ -1,46 +1,6 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "J:\\Projetos\\Pessoal\\NFT-mint-marketplace\\src\\contracts\\AIImgNFT.sol": {
-      "lastModificationDate": 1684355595727,
-      "contentHash": "fa4fc0a117928ad3908ab1f5c2de7890",
-      "sourceName": "src/contracts/AIImgNFT.sol",
-      "solcConfig": {
-        "version": "0.8.10",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
-        "@openzeppelin/contracts/utils/Counters.sol",
-        "@openzeppelin/contracts/access/Ownable.sol",
-        "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.10"
-      ],
-      "artifacts": [
-        "AIImgNFT"
-      ]
-    },
     "J:\\Projetos\\Pessoal\\NFT-mint-marketplace\\node_modules\\@openzeppelin\\contracts\\utils\\Counters.sol": {
       "lastModificationDate": 1683943797056,
       "contentHash": "74654e3ae5d7f39555055dfe244dab7a",
@@ -514,6 +474,44 @@
       ],
       "artifacts": [
         "IERC165"
+      ]
+    },
+    "J:\\Projetos\\Pessoal\\NFT-mint-marketplace\\src\\contracts\\AIImgNFT.sol": {
+      "lastModificationDate": 1684785079247,
+      "contentHash": "8d7647691503cc9a9b154c9c13489902",
+      "sourceName": "src/contracts/AIImgNFT.sol",
+      "solcConfig": {
+        "version": "0.8.10",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/utils/Counters.sol",
+        "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.10"
+      ],
+      "artifacts": [
+        "AIImgNFT"
       ]
     }
   }

@@ -2,9 +2,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 
@@ -14,7 +12,7 @@ contract AIImgNFT is ERC721URIStorage {
 
     constructor() ERC721("AIImgNFT", "AIT") {}
 
-    function mintToken(address addressTo, string memory tokenURI) public virtual payable {
+    function mintToken(address addressTo, string memory tokenURI) public virtual payable  returns (uint256){
 
         require(msg.value >= 10, "Not enough ETH sent; check price!");
 
@@ -24,5 +22,6 @@ contract AIImgNFT is ERC721URIStorage {
 
         _mint(addressTo, newItemId);
         _setTokenURI(newItemId, tokenURI);
+        return newItemId;
     }
 }

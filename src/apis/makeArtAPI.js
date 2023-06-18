@@ -1,44 +1,32 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import fs from 'fs';
 import FormData from 'form-data';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import Axios from 'axios';
+import { promisify } from 'util';
+import * as stream from 'stream';
 
 // function to set the parameters and do the connection to the HotPot API
-export async function hotpotMakeArt(inputText) {
-  // setting the API key
-  const apiKey = process.env.AIIMAGE_API_KEY;
+export async function hotpotMakeArt(fullFileLocationPath, inputText) {
+  // set the API key
+  const apiKey = process.env.AI_IMAGE_API_KEY;
 
   if (!apiKey) {
     return console.error('API Key not valid.');
   }
 
-  // set the local path to store the image returned by HotPot API
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  const fileName = `${Date.now()}.png`;
-  const outputLocationPath = path.join(
-    __dirname,
-    `../../public/assets/media/${fileName}`,
-  );
+  // start write stream function to work with the time to get the image from the API
+  const writer = fs.createWriteStream(fullFileLocationPath);
 
-  if (!outputLocationPath) {
-    return console.error('Path to save the file not found.');
-  }
+  // set closing of the stream
+  const finished = promisify(stream.finished);
 
-  // starting write stream function to work with the time to get the image from the API
-  const writer = fs.createWriteStream(outputLocationPath);
+  // set the endpoint of the API
+  const endpoint = `${process.env.AI_IMAGE_URL}make-art`;
 
-  // stting the endpoint of the API
-  const endpoint = `${process.env.AIIMAGE_URL}make-art`;
-
-  //generating the form to the parameters of the API
+  //generate the form to the parameters of the API
   const form = new FormData();
   form.append('inputText', inputText);
 
-  //calling the API
+  //call the API
   Axios.post(endpoint, form, {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -46,7 +34,14 @@ export async function hotpotMakeArt(inputText) {
     },
     responseType: 'stream',
   })
-    .then(({ data }) => data.pipe(writer))
+    // .then(({ data }) => {
+    //   data.pipe(writer);
+    //   return finished(writer);
+    // })
+    .then((response) => {
+      response.data.pipe(writer);
+      return finished(writer); //this is a Promise
+    })
     .catch(function (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
@@ -65,8 +60,6 @@ export async function hotpotMakeArt(inputText) {
       }
       console.log(error.config);
     });
-
-  return fileName;
 }
 
 // uncomment below line to run the above function and call the API to generate an image
