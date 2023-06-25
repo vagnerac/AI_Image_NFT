@@ -1,6 +1,6 @@
-import fs from 'fs';
+import { promises as fs } from 'fs';
 
-export default function metadata(
+export default async function metadata(
   NftFilename,
   NftDescription,
   NftURL,
@@ -12,16 +12,20 @@ export default function metadata(
   metadata.name = NftFilename;
   const metadataJSON = JSON.stringify(metadata);
 
-  fs.writeFile(fullMetadataLocationPath, metadataJSON, function (err, result) {
-    if (err) console.log('error', err);
-    else {
-      console.log('File written successfully\n');
-      console.log(result.JSON);
-      console.log('The written has the following contents:');
-      console.log(
-        'file content:',
-        fs.readFileSync(fullMetadataLocationPath, 'utf8'),
-      );
-    }
-  });
+  await fs.writeFile(
+    fullMetadataLocationPath,
+    metadataJSON,
+    async function (err, result) {
+      if (err) console.log('error', err);
+      else {
+        console.log('File written successfully\n');
+        console.log('The written has the following contents:');
+        console.log(
+          'file content:',
+          await fs.readFileSync(fullMetadataLocationPath, 'utf8'),
+        );
+        return true;
+      }
+    },
+  );
 }

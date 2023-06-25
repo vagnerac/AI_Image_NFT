@@ -1,18 +1,16 @@
-// import dotenv from 'dotenv';
-// dotenv.config();
+import dotenv from 'dotenv';
+dotenv.config();
 import { getFilesFromPath } from 'web3.storage';
 import storeFiles from './config/configIPFS.js';
 
 export default async function sendFileToIPFS(fileLocationPath, fileName) {
-  const file = await getFiles(fileLocationPath);
-
-  const cid = await storeFiles(file);
-
-  const fileURL = `ipfs://${cid}/${fileName}`;
-
-  console.log(fileURL);
-
-  return fileURL;
+  let cid = '';
+  let fileURL = '';
+  return getFiles(fileLocationPath).then(async (response) => {
+    cid = await storeFiles(response);
+    fileURL = `ipfs://${cid}/${fileName}`;
+    return fileURL;
+  });
 }
 
 async function getFiles(fileLocationPath) {
@@ -20,3 +18,11 @@ async function getFiles(fileLocationPath) {
   console.log(`read ${files.length} file(s) from ${fileLocationPath}`);
   return files;
 }
+
+// uncomment below code to run above logic santandalone
+// console.log(
+//   await sendFileToIPFS(
+//     'J:/Projetos/Pessoal/NFT-mint-marketplace/public/assets/media/nftFiles/1687203896188.png',
+//     '1687203896188.png',
+//   ),
+// );

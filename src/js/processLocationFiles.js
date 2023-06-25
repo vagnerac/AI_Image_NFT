@@ -1,9 +1,12 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-export default function processFilePath(relativePath, fileExtension, fileName) {
+export function processFilePath(relativePath, fileExtension, fileName) {
+  console.log('fileName into processLocationFile', fileName);
+  console.log('fileExtension into processLocationFile', fileExtension);
+  console.log('relativePath into processLocationFile', relativePath);
   if (!fileExtension) return console.error('file extension not provided.');
-  let filename = '';
+  let filename = fileName;
   if (!fileName) filename = setFileName();
   const fullFileName = setFileExtension(filename, fileExtension);
   const absoluteFilePath = setFileAbsolutePath(fullFileName, relativePath);
@@ -12,6 +15,7 @@ export default function processFilePath(relativePath, fileExtension, fileName) {
     fullFileName: fullFileName,
     absoluteFilePath: absoluteFilePath,
   };
+  console.log('filePathData', filePathData);
   return filePathData;
 }
 
@@ -39,7 +43,7 @@ function setFileName() {
   return fileName;
 }
 
-function setFileExtension(fileName, fileExtension) {
+export function setFileExtension(fileName, fileExtension) {
   if (!fileExtension.includes('.')) fileExtension = `.${fileExtension}`;
 
   const fullFileName = `${fileName}${fileExtension}`;

@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import sendFileToIPFS from '../apis/IpfsAPI.js';
-import processFilePath from './processLocationFiles.js';
+import { processFilePath, setFileExtension } from './processLocationFiles.js';
 import metadata from '../apis/config/metadata.js';
-import { hotpotMakeArt } from '../apis/makeArtAPI.js';
+import { generateAiImage } from '../apis/stabilityAPI.js';
 
 async function runApp() {
   const fullImgLocationPath = processFilePath(
@@ -11,8 +11,10 @@ async function runApp() {
     'png',
     null,
   );
+  console.log('fullImgLocationPath', fullImgLocationPath);
 
-  const inputText = 'Cardano symbol';
+  const inputText =
+    'A soccer grass with a ball on it and goalkeeper in the background.';
 
   const iaResponseData = await processNftImg(
     fullImgLocationPath.absoluteFilePath,
@@ -21,27 +23,41 @@ async function runApp() {
   console.log('iaResponseData', iaResponseData);
   let IPFSImgResponse = '';
   if (iaResponseData) {
-    IPFSImgResponse = processIPFSImgFile(
+    IPFSImgResponse = await processIPFSImgFile(
       fullImgLocationPath.absoluteFilePath,
       fullImgLocationPath.fullFileName,
     );
+    console.log('IPFSImgResponse', IPFSImgResponse);
   } else {
     console.error('error in the IA processing to generate the image.');
     return;
   }
+  let IPFSMetadataResponse = '';
   if (IPFSImgResponse) {
+    const metadataFileExtension = 'json';
     const fullMetadataLocationPath = processFilePath(
       process.env.NFT_FILE_PATH,
-      'json',
-      fullImgLocationPath.fileName,
+      metadataFileExtension,
+      fullImgLocationPath.filename,
     );
 
-    processIPFSMetadataFile(
-      fullImgLocationPath.fileName,
+    console.log('fullMetadataLocationPath', fullMetadataLocationPath);
+
+    console.log('fullImgLocationPath.fileName', fullImgLocationPath.filename);
+    console.log('inputText', inputText);
+    console.log('IPFSImgResponse', IPFSImgResponse);
+    console.log(
+      'fullMetadataLocationPath.absoluteFilePath',
+      fullMetadataLocationPath.absoluteFilePath,
+    );
+    IPFSMetadataResponse = await processIPFSMetadataFile(
+      fullImgLocationPath.filename,
+      metadataFileExtension,
       inputText,
       IPFSImgResponse,
       fullMetadataLocationPath.absoluteFilePath,
     );
+    console.log('IPFSMetadataResponse', IPFSMetadataResponse);
   } else {
     console.error('error in the IPFS to store files.');
     return;
@@ -49,32 +65,39 @@ async function runApp() {
 }
 
 async function processNftImg(nftImgLocationPath, inputText) {
-  const iaResponseData = await hotpotMakeArt(nftImgLocationPath, inputText);
+  const iaResponseData = await generateAiImage(nftImgLocationPath, inputText);
 
   return iaResponseData;
 }
 
-function processIPFSImgFile(fullNftImgLocationPath, fileName) {
-  const IPFSImgResponse = sendFileToIPFS(fullNftImgLocationPath, fileName);
+async function processIPFSImgFile(fullNftImgLocationPath, fileName) {
+  const IPFSImgResponse = await sendFileToIPFS(
+    fullNftImgLocationPath,
+    fileName,
+  );
+  console.log(IPFSImgResponse);
   return IPFSImgResponse;
 }
 
-function processIPFSMetadataFile(
+async function processIPFSMetadataFile(
   nftName,
+  metadataFileExtension,
   nftDescription,
   nftIPFSURL,
   fullMetadataLocationPath,
 ) {
-  const metadataFile = metadata(
+  const metadataFile = await metadata(
     nftName,
     nftDescription,
     nftIPFSURL,
     fullMetadataLocationPath,
   );
 
-  const IPFSMetadataResponse = sendFileToIPFS(
+  const metadataFullFileName = setFileExtension(nftName, metadataFileExtension);
+
+  const IPFSMetadataResponse = await sendFileToIPFS(
     fullMetadataLocationPath,
-    nftName,
+    metadataFullFileName,
   );
   return IPFSMetadataResponse;
 }

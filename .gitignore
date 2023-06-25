@@ -140,3 +140,6 @@ dist
 
 # Artifacts folder from Hardhat
 src/artifacts/
+
+# Media folder
+public/assets/media/
