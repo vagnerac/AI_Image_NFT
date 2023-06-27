@@ -2,11 +2,11 @@
   "name": "blockchain-connection-v1",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/js/mintNFT.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "app": "node index.js",
+    "app": "node ./src/js/mintNFT.js",
     "dev": "webpack -w"
   },
   "keywords": [],
@@ -39,6 +39,7 @@
     "https-agent": "^1.0.0",
     "prettier": "2.8.7",
     "webpack": "^5.76.2",
-    "webpack-cli": "^5.0.1"
+    "webpack-cli": "^5.0.1",
+    "webpack-node-externals": "^3.0.0"
   }
 }

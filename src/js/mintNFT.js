@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
+// dotenv.config();
 import fs from 'fs';
-import { Contract, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import Provider from './provider.js';
 import Signer from './signer.js';
-import Transaction from './transaction.js';
-import ValidateFormData from './validateFormData.js';
-import contract from '../artifacts/src/contracts/AIImgNFT.sol/AIImgNFT.json';
 
 // app class to process main functions from the system
 export class App {
@@ -24,11 +22,16 @@ export class App {
 
   async runApp() {
     try {
-      await this.signerConnection();
+      // await this.signerConnection();
       await this.isConnected();
 
+      this.connectBtn.onclick = async () => {
+        await this.signerConnection();
+        await this.isConnected();
+      };
+
       if (this.isConnected) {
-        const privateKey = process.env.PTIVATE_KEY;
+        // const privateKey = process.env.PTIVATE_KEY;
         const contractAddress = process.env.CONTRACT_ADDRESS;
         const contractABI = fs
           .readFileSync('../src/contracts/AIImgNFT.sol/AIImgNFT.json')
@@ -45,14 +48,18 @@ export class App {
 
       const accounts = await ethereum.request({ method: 'eth_accounts' });
 
-      this.mintNFT(this.signer.address);
+      this.mintNFT(
+        this.signer.address,
+        'ipfs://bafybeifi4yeo4zt56u5uya3u3ktgm6yb77yfl7lqelaimb3szovblq2qo4/1687703139655.json',
+        contractInstance,
+      );
     } catch (e) {}
   }
 
   async mintNFT(address, URI, contractInstance) {
     try {
-      const nonce = await this.getNonce(wallet);
-      const gasFee = await this.getGasPrice();
+      const nonce = await this.getNonce(this.signer.address);
+      const gasFee = await this.getGasPrice(provider);
       let rawTxn = await contractInstance.populateTransaction.safeMint(
         address,
         URI,
@@ -125,8 +132,8 @@ export class App {
     return feeData;
   }
 
-  async getNonce(signe) {
-    let nonce = await this.signer.getTransactionCount(wallet.address);
+  async getNonce(address) {
+    let nonce = await this.signer.getTransactionCount(address);
     return nonce;
   }
 
