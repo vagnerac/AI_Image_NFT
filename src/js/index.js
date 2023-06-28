@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import sendFileToIPFS from '../apis/IpfsAPI.js';
 import { processFilePath, setFileExtension } from './processLocationFiles.js';
 import metadata from '../apis/config/metadata.js';
 import { generateAiImage } from '../apis/stabilityAPI.js';
 
-async function runApp() {
+export async function imgStorageProcessing(nftDescription) {
   const fullImgLocationPath = processFilePath(
     process.env.NFT_FILE_PATH,
     'png',
@@ -13,8 +11,7 @@ async function runApp() {
   );
   console.log('fullImgLocationPath', fullImgLocationPath);
 
-  const inputText =
-    'A soccer grass with a ball on it and goalkeeper in the background.';
+  const inputText = nftDescription;
 
   const iaResponseData = await processNftImg(
     fullImgLocationPath.absoluteFilePath,
@@ -62,6 +59,7 @@ async function runApp() {
     console.error('error in the IPFS to store files.');
     return;
   }
+  return IPFSMetadataResponse;
 }
 
 async function processNftImg(nftImgLocationPath, inputText) {
@@ -101,5 +99,3 @@ async function processIPFSMetadataFile(
   );
   return IPFSMetadataResponse;
 }
-
-await runApp();

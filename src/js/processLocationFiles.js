@@ -26,7 +26,7 @@ function setFileAbsolutePath(fileName, filePath) {
     return;
   }
 
-  const __filePath = fileURLToPath(import.meta.url);
+  const __filePath = url.fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filePath);
   const absoluteLocationPath = path.join(__dirname, filePath, filename);
 

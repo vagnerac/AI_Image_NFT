@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import { getFilesFromPath } from 'web3.storage';
 import storeFiles from './config/configIPFS.js';
 

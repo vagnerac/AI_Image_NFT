@@ -3,12 +3,12 @@ import Axios from 'axios';
 
 export default async function stabilityAuth() {
   const apiHost = process.env.AI_HOST ?? 'https://api.stability.ai';
-  const url = `${apiHost}/v1/user/account`;
+  const apiURL = `${apiHost}/v1/user/account`;
   const apiKey = process.env.AI_IMAGE_API_KEY;
 
   if (!apiKey) throw new Error('Missing Stability API key.');
 
-  const user = await Axios.get(url, {
+  const user = await Axios.get(apiURL, {
     headers: {
       Authorization: `Bearer ${apiKey}`,
     },

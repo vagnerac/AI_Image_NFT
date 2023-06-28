@@ -1,4 +1,3 @@
-// import nodeExternals from 'webpack-node-externals';
 import Dotenv from 'dotenv-webpack';
 import path from 'path';
 import { fileURLToPath } from 'url';

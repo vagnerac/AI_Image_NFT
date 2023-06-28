@@ -1,15 +1,15 @@
-// const ethers = require('ethers');
-// import { ethers } from 'ethers';
+//const ethers = require('ethers');
+import { ethers } from 'ethers';
 
 export default class Provider {
   constructor() {}
 
   async blockchainConnection() {
     try {
-      let provider;
+      let provider = '';
       // check if Metamask is installed.
       if (window.ethereum === null) {
-        console.log('MetaMask not installed using read-only defaults');
+        console.log('MetaMask not installed; using read-only defaults');
         provider = ethers.getDefaultProvider();
       } else {
         // connect to Metamask wallet
