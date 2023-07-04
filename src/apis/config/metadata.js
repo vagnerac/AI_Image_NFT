@@ -1,31 +1,29 @@
 import { promises as fs } from 'fs';
 
-export default async function metadata(
-  NftFilename,
-  NftDescription,
-  NftURL,
-  fullMetadataLocationPath,
+export default async function metadataCreateFile(
+  nftFullFilename,
+  nftDescription,
+  nftURL,
+  metadataLocationPath,
 ) {
   const metadata = new Object();
-  metadata.description = NftDescription;
-  metadata.image = NftURL;
-  metadata.name = NftFilename;
-  const metadataJSON = JSON.stringify(metadata);
+  metadata.description = nftDescription;
+  metadata.image = nftURL;
+  metadata.name = nftFullFilename;
+  const metadataJSON = JSON.stringify(metadata, null, 4);
+  console.log(metadata);
 
-  await fs.writeFile(
-    fullMetadataLocationPath,
+  const fileLocationPath = await fs.writeFile(
+    metadataLocationPath,
     metadataJSON,
-    async function (err, result) {
-      if (err) console.log('error', err);
-      else {
-        console.log('File written successfully\n');
-        console.log('The written has the following contents:');
-        console.log(
-          'file content:',
-          await fs.readFileSync(fullMetadataLocationPath, 'utf8'),
-        );
-        return true;
-      }
-    },
   );
+
+  const returnFileData = await readMetadataFile(metadataLocationPath);
+
+  return returnFileData;
+}
+
+async function readMetadataFile(metadataLocationPath) {
+  const fileData = await fs.readFile(metadataLocationPath, 'utf8');
+  return fileData;
 }

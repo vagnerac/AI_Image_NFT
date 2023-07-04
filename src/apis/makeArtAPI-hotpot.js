@@ -62,5 +62,5 @@ export async function hotpotMakeArt(fullFileLocationPath, inputText) {
     });
 }
 
-// uncomment below line to run the above function and call the API to generate an image
+// below line run the above function and call the API to generate an image
 // hotpotMakeArt('test');
